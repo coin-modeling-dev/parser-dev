@@ -1,0 +1,63 @@
+{
+  "Inventory": {
+    "type": "container",
+    "symbols": [
+      "P",
+      "T",
+      "X",
+      "B",
+      "B0",
+      "D"
+    ],
+    "definition": {
+      "P": {
+        "type": "set",
+        "ordered": false,
+        "size": 4
+      },
+      "T": {
+        "type": "set",
+        "ordered": true,
+        "starts": 0,
+        "ends": 3
+      },
+      "X": {
+        "type": "tensor",
+        "style": "variable",
+        "index": [
+          "P",
+          "T"
+        ]
+      },
+      "B": {
+        "type": "tensor",
+        "style": "constraint",
+        "index": [
+          "P",
+          "T"
+        ],
+        "definition": {
+          "T>0": "B[T,P] = B[T-1,P] + X[T,P] - D[T,P]",
+          "T==0": "B[0,P] = B0[P]"
+        }
+      },
+      "B0": {
+        "type": "tensor",
+        "style": "fixed",
+        "value": 0.0,
+        "index": [
+          "P"
+        ]
+      },
+      "D": {
+        "type": "tensor",
+        "style": "fixed",
+        "value": "numpy.ndarray.random(T,P)",
+        "index": [
+          "T",
+          "P"
+        ]
+      }
+    }
+  }
+}
