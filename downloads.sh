@@ -19,4 +19,14 @@ function build_rapidjson {
     popd > /dev/null
 }
 
+function build_sdplog {
+    REPOSITORY="spdlog"
+    if [[ -e ${REPOSITORY} ]]; then
+        rm -rf ${REPOSITORY}
+        echo "Removing existing and downloading fresh repository ${REPOSITORY}"
+    fi
+    git clone https://github.com/gabime/spdlog.git
+}
+
+build_sdplog
 build_rapidjson

@@ -2,47 +2,30 @@
 // Created by kingaj on 2/27/19.
 //
 
-#include <cstdio>
-#include <iostream>
-#include <exception>
 
-#include <rapidjson/filereadstream.h>
-#include <rapidjson/stringbuffer.h>
-#include <rapidjson/prettywriter.h>
-#include <rapidjson/document.h>
+#include "src/utils.h"
+#include "test/test_index.h"
+
+#include "src/DoParse.h"
 
 using namespace rapidjson;
 
 
-#define TEST_JSON_FILE "../json/inventory.json"
-
 int main() {
 
-    try {
-        FILE *fp = fopen(TEST_JSON_FILE, "r");
-        if (! fp ){
-            std::cerr << "File " << TEST_JSON_FILE << " not found" << std::endl;
-            throw std::exception();
-        }
-        char readBuffer[65536];
-        FileReadStream is(fp, readBuffer, sizeof(readBuffer));
+    auto console = spdlog::stdout_color_mt("console");
+    auto err_logger = spdlog::stderr_color_mt("stderr");
+    spdlog::get("console")->info("loggers can be retrieved from a global registry using the spdlog::get(logger_name)");
 
-        Document d;
-        d.ParseStream(is);
-        fclose(fp);
+    if (testSimpleIndex() == 0)
+        console->info("Test SimpleIndex succeeded");
+    else
+        err_logger->critical("Test SimpleIndex failed");
 
-        StringBuffer buffer;
+    std::string TEST_JSON_FILE = "../../stoprog-dev/json/v2-newsvendor/newsvendor.json";
 
-        buffer.Clear();
+    DoParse doParse(TEST_JSON_FILE);
+    doParse.prettyPrint();
 
-        PrettyWriter<rapidjson::StringBuffer> writer(buffer);
-        d.Accept(writer);
-
-
-        std::cout << buffer.GetString() << std::endl;
-        return 0;
-    }
-    catch(std::exception &e) {
-        return 1;
-    }
+    return 0;
 }
