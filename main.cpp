@@ -3,10 +3,10 @@
 //
 
 
-#include "src/utils.h"
+#include "src/utils/utils.h"
 #include "test/test_index.h"
 
-#include "src/DoParse.h"
+#include "src/parser/DoParse.h"
 
 using namespace rapidjson;
 
@@ -16,16 +16,17 @@ int main() {
     auto console = spdlog::stdout_color_mt("console");
     auto err_logger = spdlog::stderr_color_mt("stderr");
     spdlog::get("console")->info("loggers can be retrieved from a global registry using the spdlog::get(logger_name)");
+    spdlog::set_level(spdlog::level::debug); // Set global log level to debug
 
-    if (testSimpleIndex() == 0)
-        console->info("Test SimpleIndex succeeded");
-    else
-        err_logger->critical("Test SimpleIndex failed");
+    // tests
+    testSimpleIndex();
 
-    std::string TEST_JSON_FILE = "../../stoprog-dev/json/v2-newsvendor/newsvendor.json";
+    // parse
+    FILE *fp = fopen("../json/test.json", "r");
+    DoParse doParse(fp);
+    fclose(fp);
 
-    DoParse doParse(TEST_JSON_FILE);
-    doParse.prettyPrint();
+    //doParse.prettyPrint();
 
     return 0;
 }

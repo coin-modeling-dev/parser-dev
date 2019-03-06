@@ -5,10 +5,12 @@
 #include <iostream>
 #include <cassert>
 
-#include "../src/SimpleIndex.h"
+#include "../src/utils/utils.h"
+#include "../src/simplemodel/SimpleIndex.h"
 
 
 using namespace std;
+using namespace spdlog;
 
 void testIndex(SimpleIndex &tensorIndex, const VectorUInt &t_indx, unsigned int DISPLAY = 0) {
     unsigned int n = tensorIndex.index(t_indx);
@@ -49,7 +51,7 @@ void testInvIndex(SimpleIndex &tensorIndex, unsigned int n, unsigned int DISPLAY
 
 }
 
-int testSimpleIndex(unsigned int DISPLAY = 0) {
+int testSimpleIndex(unsigned int DISPLAY = 0, shared_ptr<logger> logger = get("console")) {
     VectorUInt dims = {3, 5};
     SimpleIndex tensorIndex(dims);
 
@@ -79,9 +81,10 @@ int testSimpleIndex(unsigned int DISPLAY = 0) {
     }
 
     if (success) {
+        logger->info("testSimpleIndex succeeded");
         return 0;
     } else {
-        std::cout << "testSimpleIndex failed!\n";
+        logger->critical("testSimpleIndex failed");
         return 1;
     }
 }

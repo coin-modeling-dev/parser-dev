@@ -17,4 +17,8 @@
 #include <rapidjson/prettywriter.h>
 #include <rapidjson/document.h>
 
+static const char *kTypeNames[] =
+        {"Null", "False", "True", "Object", "Array", "String", "Number"};
+
+
 #endif //PARSER_DEV_UTILS_H
