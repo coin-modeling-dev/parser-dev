@@ -51,7 +51,7 @@ void testInvIndex(SimpleIndex &tensorIndex, unsigned int n, unsigned int DISPLAY
 
 }
 
-int testSimpleIndex(unsigned int DISPLAY = 0, shared_ptr<logger> logger = get("console")) {
+int testSimpleIndex(unsigned int DISPLAY = 0) {
     VectorUInt dims = {3, 5};
     SimpleIndex tensorIndex(dims);
 
@@ -81,10 +81,10 @@ int testSimpleIndex(unsigned int DISPLAY = 0, shared_ptr<logger> logger = get("c
     }
 
     if (success) {
-        logger->info("testSimpleIndex succeeded");
+        spdlog::info("testSimpleIndex succeeded");
         return 0;
     } else {
-        logger->critical("testSimpleIndex failed");
+        spdlog::critical("testSimpleIndex failed");
         return 1;
     }
 }

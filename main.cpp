@@ -13,9 +13,6 @@ using namespace rapidjson;
 
 int main() {
 
-    auto console = spdlog::stdout_color_mt("console");
-    auto err_logger = spdlog::stderr_color_mt("stderr");
-    spdlog::get("console")->info("loggers can be retrieved from a global registry using the spdlog::get(logger_name)");
     spdlog::set_level(spdlog::level::debug); // Set global log level to debug
 
     // tests
