@@ -6,7 +6,8 @@
 #define PARSER_DEV_DOPARSE_H
 
 #include "../utils/utils.h"
-#include "ParseFactory.h"
+#include "../mosdex/MosdexRoot.h"
+#include "ParseComponent.h"
 
 using namespace rapidjson;
 using namespace spdlog;
@@ -14,34 +15,25 @@ using namespace std;
 
 class DoParse {
 
+public:
+    explicit DoParse(string t_file) {
+        FILE *fp = fopen(t_file.c_str(), "r");
+        if (!fp) {
+            string message = "Cannot open file " + t_file;
+            throw runtime_error(message);
+        }
+        readDocumentFromFile(fp);
+        fclose(fp);
+
+        m_root = make_shared<MosdexRoot>(MosdexRoot(t_file));
+
+        string component = "ROOT";
+        ParseComponent(m_document, m_root).parse("ROOT");
+    }
+
 private:
     Document m_document{};
-
-public:
-    explicit DoParse(FILE *t_fp) {
-        readDocumentFromFile(t_fp);
-        parseDocument();
-    }
-
-private:
-    void parseDocument() {
-        spdlog::debug("Entering parseDocument");
-        if (!m_document.IsObject()) {
-            throw runtime_error("Bad JSON document");
-        }
-
-        ParseFactory parseFactory;
-
-        for (Value::ConstMemberIterator itr = m_document.MemberBegin();
-             itr != m_document.MemberEnd(); ++itr) {
-            string memberName(itr->name.GetString());
-            transform(memberName.begin(), memberName.end(), memberName.begin(), ::toupper);
-            spdlog::debug("Type of member {} is {}",
-                          memberName.c_str(), kTypeNames[itr->value.GetType()]);
-
-
-        }
-    }
+    shared_ptr<MosdexRoot> m_root{};
 
     void readDocumentFromFile(FILE *t_fp) {
         try {

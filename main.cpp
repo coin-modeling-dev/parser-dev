@@ -19,9 +19,8 @@ int main() {
     testSimpleIndex();
 
     // parse
-    FILE *fp = fopen("../json/test.json", "r");
-    DoParse doParse(fp);
-    fclose(fp);
+    string testFile("../json/test.json");
+    DoParse doParse(testFile);
 
     //doParse.prettyPrint();
 
