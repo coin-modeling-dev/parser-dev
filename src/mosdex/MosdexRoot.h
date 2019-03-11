@@ -7,14 +7,21 @@
 
 #include "../utils/utils.h"
 
-using namespace std;
-
 class MosdexRoot {
 private:
     string jsonFileName{};
+    Document &m_document;
 
 public:
-    explicit MosdexRoot(string t_file): jsonFileName{t_file} {
+    const string &getJsonFileName() const {
+        return jsonFileName;
+    }
+
+    Document &getM_document() const {
+        return m_document;
+    }
+
+    MosdexRoot(string t_file, Document &t_document): jsonFileName{t_file}, m_document{t_document} {
 
     }
 

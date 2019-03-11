@@ -9,10 +9,6 @@
 #include "../mosdex/MosdexRoot.h"
 #include "ParseComponent.h"
 
-using namespace rapidjson;
-using namespace spdlog;
-using namespace std;
-
 class DoParse {
 
 public:
@@ -25,15 +21,15 @@ public:
         readDocumentFromFile(fp);
         fclose(fp);
 
-        m_root = make_shared<MosdexRoot>(MosdexRoot(t_file));
+        m_mosdex = make_shared<MosdexRoot>(MosdexRoot(t_file, m_document));
 
-        string component = "ROOT";
-        ParseComponent(m_document, m_root).parse("ROOT");
+        unique_ptr<ParseComponent> parseComponent = make_unique<ParseComponent>(ParseComponent(m_mosdex));
+        parseComponent->parse("ROOT");
     }
 
 private:
     Document m_document{};
-    shared_ptr<MosdexRoot> m_root{};
+    shared_ptr<MosdexRoot> m_mosdex{};
 
     void readDocumentFromFile(FILE *t_fp) {
         try {

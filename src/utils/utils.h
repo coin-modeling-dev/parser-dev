@@ -16,6 +16,11 @@
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/prettywriter.h>
 #include <rapidjson/document.h>
+#include <rapidjson/pointer.h>
+
+using namespace rapidjson;
+using namespace spdlog;
+using namespace std;
 
 static const char *kTypeNames[] =
         {"Null", "False", "True", "Object", "Array", "String", "Number"};

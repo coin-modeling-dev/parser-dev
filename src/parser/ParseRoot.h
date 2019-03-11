@@ -8,16 +8,17 @@
 #include "../utils/utils.h"
 #include "ParseComponent.h"
 
-using namespace rapidjson;
 
-
-void parseRoot(Document &m_document, shared_ptr<MosdexRoot> m_mosdex, string t_component) {
-    for (Value::ConstMemberIterator itr = m_document.MemberBegin();
-         itr != m_document.MemberEnd(); ++itr) {
+void parseRoot(shared_ptr<MosdexRoot> m_mosdex) {
+    Document &t_document = m_mosdex->getM_document();
+    for (Value::ConstMemberIterator itr = t_document.MemberBegin();
+         itr != t_document.MemberEnd(); ++itr) {
         string memberName(itr->name.GetString());
-        transform(memberName.begin(), memberName.end(), memberName.begin(), ::toupper);
+        string memberNode = "/" + memberName;
         spdlog::debug("Type of member {} is {}",
-                      memberName.c_str(), kTypeNames[itr->value.GetType()]);
+                      memberNode.c_str(), kTypeNames[itr->value.GetType()]);
+
+        ParseComponent(m_mosdex).parse(memberNode);
 
     }
 
