@@ -7,12 +7,32 @@
 
 #include "../utils/utils.h"
 
+#include <map>
+
 class MosdexRoot {
 private:
     string jsonFileName{};
     Document &m_document;
 
+    map<string, string> m_info{};
+    string m_problemType{};
 public:
+    const string &getM_problemType() const {
+        return m_problemType;
+    }
+
+    void setM_problemType(const string &m_problemType) {
+        spdlog::debug("MosdexRoot: Setting problem type to {}", m_problemType);
+        MosdexRoot::m_problemType = m_problemType;
+    }
+
+
+public:
+    void setInfoValue(string t_key, string t_value){
+        spdlog::debug("MosdexRoot: Setting info -- {} is {}", t_key, t_value);
+        m_info.insert(make_pair(t_key, t_value));
+    }
+
     const string &getJsonFileName() const {
         return jsonFileName;
     }

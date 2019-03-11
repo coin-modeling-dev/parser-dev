@@ -23,8 +23,12 @@ public:
 
     void parse(string t_component) {
         spdlog::debug("Parsing {} section", t_component);
+
+        // transform to upper case
         string component = t_component;
         transform(component.begin(), component.end(), component.begin(), ::toupper);
+
+        // apply appropriate parsing implementation
         if (component == "ROOT") {
             parseRoot(m_mosdex);
         }

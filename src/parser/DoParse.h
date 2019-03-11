@@ -23,8 +23,9 @@ public:
 
         m_mosdex = make_shared<MosdexRoot>(MosdexRoot(t_file, m_document));
 
-        unique_ptr<ParseComponent> parseComponent = make_unique<ParseComponent>(ParseComponent(m_mosdex));
-        parseComponent->parse("ROOT");
+        ParseComponent(m_mosdex).parse("ROOT");
+
+        spdlog::info("Parsing completed.");
     }
 
 private:
