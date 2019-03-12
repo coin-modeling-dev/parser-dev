@@ -21,9 +21,9 @@ public:
         readDocumentFromFile(fp);
         fclose(fp);
 
-        m_mosdex = make_shared<MosdexRoot>(MosdexRoot(t_file, m_document));
+        m_mosdex = make_shared<MosdexRoot>(MosdexRoot(t_file));
 
-        ParseRoot().parse(m_mosdex);
+        ParseRoot(m_document).parse(m_mosdex);
 
         spdlog::info("Parsing completed.");
     }

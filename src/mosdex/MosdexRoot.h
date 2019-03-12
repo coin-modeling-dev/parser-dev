@@ -12,7 +12,6 @@
 class MosdexRoot {
 private:
     string jsonFileName{};
-    Document &m_document;
 
     map<string, string> m_info{};
     string m_problemType{};
@@ -35,13 +34,7 @@ public:
         return jsonFileName;
     }
 
-    Document &getM_document() const {
-        return m_document;
-    }
-
-    MosdexRoot(string t_file, Document &t_document): jsonFileName{t_file}, m_document{t_document} {
-
-    }
+    explicit MosdexRoot(string t_file) : jsonFileName{t_file} {}
 
 
 };

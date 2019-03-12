@@ -10,17 +10,16 @@
 
 class ParseProblem {
 private:
-    shared_ptr<MosdexRoot> m_mosdex{};
+    Document &m_document;
 public:
-    explicit ParseProblem(shared_ptr<MosdexRoot> t_mosdex) : m_mosdex{t_mosdex} {}
+    explicit ParseProblem(Document &t_document) : m_document{t_document} {}
 
-    void parse(string t_component);
+    void parse(shared_ptr<MosdexRoot> t_mosdex, string t_component);
 };
 
-void ParseProblem::parse(string t_component) {
-
+void ParseProblem::parse(shared_ptr<MosdexRoot> t_mosdex, string t_component) {
     // Get pointer to problem node
-    Value *problemNode = Pointer(t_component.c_str()).Get(m_mosdex->getM_document());
+    Value *problemNode = Pointer(t_component.c_str()).Get(m_document);
 
     for (Value::ConstMemberIterator itr = problemNode->MemberBegin(); itr != problemNode->MemberEnd(); ++itr) {
         string memberName(itr->name.GetString());
@@ -30,9 +29,9 @@ void ParseProblem::parse(string t_component) {
 
         // Handle different members
         if (kTypeNames[itr->value.GetType()] == "String" ) {
-            m_mosdex->setInfoValue(memberName, itr->value.GetString());
+            t_mosdex->setInfoValue(memberName, itr->value.GetString());
             if (memberName == "Type") {
-                m_mosdex->setM_problemType(itr->value.GetString());
+                t_mosdex->setM_problemType(itr->value.GetString());
             }
         }
 

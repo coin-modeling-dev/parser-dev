@@ -11,9 +11,10 @@
 
 
 class ParseComponent {
+    Document &m_document;
 public:
 
-    ParseComponent() = default;
+    explicit ParseComponent(Document &t_document) : m_document{t_document} {}
 
     void parse(shared_ptr<MosdexRoot> t_mosdex, string t_component) {
         spdlog::debug("Parsing {} section", t_component);
@@ -23,10 +24,10 @@ public:
         transform(section.begin(), section.end(), section.begin(), ::toupper);
 
         if (section == "/PROBLEM") {
-            ParseProblem(t_mosdex).parse(t_component);
+            ParseProblem(m_document).parse(t_mosdex, t_component);
         }
         if (section == "/DATA") {
-            ParseProblem(t_mosdex).parse(t_component);
+            ParseProblem(m_document).parse(t_mosdex, t_component);
         }
     }
 

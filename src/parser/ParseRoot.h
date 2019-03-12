@@ -9,19 +9,20 @@
 #include "ParseComponent.h"
 
 class ParseRoot {
+private:
+    Document &m_document;
 public:
-    ParseRoot() = default;
+    explicit ParseRoot(Document &t_document) : m_document{t_document} {}
 
     void parse(shared_ptr<MosdexRoot> m_mosdex) {
-        Document &t_document = m_mosdex->getM_document();
-        for (Value::ConstMemberIterator itr = t_document.MemberBegin();
-             itr != t_document.MemberEnd(); ++itr) {
+        for (Value::ConstMemberIterator itr = m_document.MemberBegin();
+             itr != m_document.MemberEnd(); ++itr) {
             string memberName(itr->name.GetString());
             string memberNode = "/" + memberName;
             spdlog::debug("Type of member {} is {}",
                           memberNode.c_str(), kTypeNames[itr->value.GetType()]);
 
-            ParseComponent().parse(m_mosdex, memberNode);
+            ParseComponent(m_document).parse(m_mosdex, memberNode);
 
         }
 
