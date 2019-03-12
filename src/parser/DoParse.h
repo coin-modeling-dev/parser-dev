@@ -23,7 +23,7 @@ public:
 
         m_mosdex = make_shared<MosdexRoot>(MosdexRoot(t_file, m_document));
 
-        ParseComponent(m_mosdex).parse("ROOT");
+        parseRoot(m_mosdex);
 
         spdlog::info("Parsing completed.");
     }

@@ -18,7 +18,7 @@ void parseRoot(shared_ptr<MosdexRoot> m_mosdex) {
         spdlog::debug("Type of member {} is {}",
                       memberNode.c_str(), kTypeNames[itr->value.GetType()]);
 
-        ParseComponent(m_mosdex).parse(memberNode);
+        ParseComponent().parse(m_mosdex, memberNode);
 
     }
 

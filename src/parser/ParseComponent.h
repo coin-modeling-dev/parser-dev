@@ -7,42 +7,29 @@
 
 #include "../utils/utils.h"
 #include "../mosdex/MosdexRoot.h"
+#include "ParseProblem.h"
 
-
-void parseRoot(shared_ptr<MosdexRoot> m_mosdex);
-void parseProblem(shared_ptr<MosdexRoot> m_mosdex, string t_component);
 
 class ParseComponent {
-protected:
-    shared_ptr<MosdexRoot> m_mosdex;
 public:
-    explicit ParseComponent(shared_ptr<MosdexRoot> t_mosdex) :
-            m_mosdex{t_mosdex} {
-    }
 
+    ParseComponent() = default;
 
-    void parse(string t_component) {
+    void parse(shared_ptr<MosdexRoot> t_mosdex, string t_component) {
         spdlog::debug("Parsing {} section", t_component);
 
         // transform to upper case
-        string component = t_component;
-        transform(component.begin(), component.end(), component.begin(), ::toupper);
+        string section = t_component;
+        transform(section.begin(), section.end(), section.begin(), ::toupper);
 
-        // apply appropriate parsing implementation
-        if (component == "ROOT") {
-            parseRoot(m_mosdex);
+        if (section == "/PROBLEM") {
+            ParseProblem(t_mosdex).parse(t_component);
         }
-        if (component == "/PROBLEM") {
-            parseProblem(m_mosdex, t_component);
+        if (section == "/DATA") {
+            ParseProblem(t_mosdex).parse(t_component);
         }
     }
 
-    void parse(Value *value, string t_component) {
-        spdlog::debug("Parsing {} section", t_component);
-        if (t_component == "ROOT") {
-            parseRoot(m_mosdex);
-        }
-    }
 };
 
 #include "ParseRoot.h"

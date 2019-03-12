@@ -26,8 +26,6 @@ public:
         MosdexRoot::m_problemType = m_problemType;
     }
 
-
-public:
     void setInfoValue(string t_key, string t_value){
         spdlog::debug("MosdexRoot: Setting info -- {} is {}", t_key, t_value);
         m_info.insert(make_pair(t_key, t_value));
@@ -44,7 +42,6 @@ public:
     MosdexRoot(string t_file, Document &t_document): jsonFileName{t_file}, m_document{t_document} {
 
     }
-
 
 
 };

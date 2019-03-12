@@ -6,10 +6,18 @@
 #define PARSER_DEV_PARSEPROBLEM_H
 
 #include "../utils/utils.h"
-#include "ParseComponent.h"
 
-void parseProblem(shared_ptr<MosdexRoot> m_mosdex, string t_component) {
-    /// Parse Problem section
+
+class ParseProblem {
+private:
+    shared_ptr<MosdexRoot> m_mosdex{};
+public:
+    explicit ParseProblem(shared_ptr<MosdexRoot> t_mosdex) : m_mosdex{t_mosdex} {}
+
+    void parse(string t_component);
+};
+
+void ParseProblem::parse(string t_component) {
 
     // Get pointer to problem node
     Value *problemNode = Pointer(t_component.c_str()).Get(m_mosdex->getM_document());
@@ -27,12 +35,6 @@ void parseProblem(shared_ptr<MosdexRoot> m_mosdex, string t_component) {
                 m_mosdex->setM_problemType(itr->value.GetString());
             }
         }
-        else {
-            Value *value1 = Pointer(memberNode.c_str()).Get(m_mosdex->getM_document());
-            if (value1)
-                ParseComponent(m_mosdex).parse(value1, memberNode);
-        }
-
 
     }
 
