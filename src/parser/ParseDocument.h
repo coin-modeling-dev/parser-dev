@@ -6,13 +6,15 @@
 #define PARSER_DEV_PARSEROOT_H
 
 #include "../utils/utils.h"
-#include "ParseComponent.h"
+#include "ParseSection.h"
 
-class ParseRoot {
+class ParseDocument {
 private:
     Document &m_document;
 public:
-    explicit ParseRoot(Document &t_document) : m_document{t_document} {}
+    explicit ParseDocument(Document &t_document) : m_document{t_document} {
+        spdlog::debug("Entering ParseDocument");
+    }
 
     void parse(shared_ptr<MosdexRoot> m_mosdex) {
         for (Value::ConstMemberIterator itr = m_document.MemberBegin();
@@ -22,7 +24,7 @@ public:
             spdlog::debug("Type of member {} is {}",
                           memberNode.c_str(), kTypeNames[itr->value.GetType()]);
 
-            ParseComponent(m_document).parse(m_mosdex, memberNode);
+            ParseSection(m_document).parse(m_mosdex, memberNode);
 
         }
 

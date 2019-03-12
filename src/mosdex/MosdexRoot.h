@@ -15,6 +15,9 @@ private:
 
     map<string, string> m_info{};
     string m_problemType{};
+
+    map <string, string> m_data{};
+
 public:
     const string &getM_problemType() const {
         return m_problemType;

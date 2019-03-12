@@ -19,8 +19,9 @@ int main() {
     testSimpleIndex();
 
     // parse
+    Document document;
     string testFile("../json/test.json");
-    DoParse doParse(testFile);
+    DoParse(document).parse(testFile);
 
     //doParse.prettyPrint();
 

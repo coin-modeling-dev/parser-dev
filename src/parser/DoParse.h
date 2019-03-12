@@ -7,12 +7,18 @@
 
 #include "../utils/utils.h"
 #include "../mosdex/MosdexRoot.h"
-#include "ParseComponent.h"
+#include "ParseDocument.h"
 
 class DoParse {
 
+private:
+    Document &m_document;
+    shared_ptr<MosdexRoot> m_mosdex{};
+
 public:
-    explicit DoParse(string t_file) {
+    explicit DoParse(Document &t_document) : m_document{t_document} {}
+
+    void parse(string t_file) {
         FILE *fp = fopen(t_file.c_str(), "r");
         if (!fp) {
             string message = "Cannot open file " + t_file;
@@ -21,16 +27,19 @@ public:
         readDocumentFromFile(fp);
         fclose(fp);
 
+        spdlog::info("Document read, checking number of sections ...");
+        spdlog::info("Document has {} sections", m_document.MemberCount());
+
+        // Create Mosdex data structure
         m_mosdex = make_shared<MosdexRoot>(MosdexRoot(t_file));
 
-        ParseRoot(m_document).parse(m_mosdex);
+        // Parse document into Mosdex data structure
+        ParseDocument(m_document).parse(m_mosdex);
 
         spdlog::info("Parsing completed.");
     }
 
 private:
-    Document m_document{};
-    shared_ptr<MosdexRoot> m_mosdex{};
 
     void readDocumentFromFile(FILE *t_fp) {
         try {
@@ -46,7 +55,6 @@ private:
             throw e;
         }
 
-        spdlog::info("Parsed file");
     }
 
 public:

@@ -6,28 +6,29 @@
     "Date": "1 March 2019"
   },
   "Data": {
-    "financesTable": {
-      "Type": "Table",
-      "SCHEMA": {
-        "FIELDS": [
-          "date",
-          "budget",
-          "profit"
-        ],
-        "TYPES": [
-          "STRING",
-          "DOUBLE",
-          "DOUBLE"
+    "Table": {
+      "financesTable": {
+        "SCHEMA": {
+          "FIELDS": [
+            "date",
+            "budget",
+            "profit"
+          ],
+          "TYPES": [
+            "STRING",
+            "DOUBLE",
+            "DOUBLE"
+          ]
+        },
+        "ROWS": [
+          [
+            "Monday",
+            100.0,
+            null,
+            null
+          ]
         ]
-      },
-      "ROWS": [
-        [
-          "Monday",
-          100.0,
-          null,
-          null
-        ]
-      ]
+      }
     }
   }
 }
