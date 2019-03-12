@@ -8,21 +8,25 @@
 #include "../utils/utils.h"
 #include "ParseComponent.h"
 
+class ParseRoot {
+public:
+    ParseRoot() = default;
 
-void parseRoot(shared_ptr<MosdexRoot> m_mosdex) {
-    Document &t_document = m_mosdex->getM_document();
-    for (Value::ConstMemberIterator itr = t_document.MemberBegin();
-         itr != t_document.MemberEnd(); ++itr) {
-        string memberName(itr->name.GetString());
-        string memberNode = "/" + memberName;
-        spdlog::debug("Type of member {} is {}",
-                      memberNode.c_str(), kTypeNames[itr->value.GetType()]);
+    void parse(shared_ptr<MosdexRoot> m_mosdex) {
+        Document &t_document = m_mosdex->getM_document();
+        for (Value::ConstMemberIterator itr = t_document.MemberBegin();
+             itr != t_document.MemberEnd(); ++itr) {
+            string memberName(itr->name.GetString());
+            string memberNode = "/" + memberName;
+            spdlog::debug("Type of member {} is {}",
+                          memberNode.c_str(), kTypeNames[itr->value.GetType()]);
 
-        ParseComponent().parse(m_mosdex, memberNode);
+            ParseComponent().parse(m_mosdex, memberNode);
+
+        }
 
     }
-
-}
+};
 
 
 #endif //PARSER_DEV_PARSEROOT_H
