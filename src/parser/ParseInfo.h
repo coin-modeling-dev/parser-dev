@@ -27,7 +27,7 @@ void ParseInfo::parse(shared_ptr<MosdexRoot> t_mosdex, string t_component) {
         spdlog::debug("Type of member {} is {}",
                       memberNode.c_str(), kTypeNames[itr->value.GetType()]);
 
-        // Handle different members
+        // Handle members that are strings
         if (kTypeNames[itr->value.GetType()] == "String" ) {
             t_mosdex->setInfoValue(memberName, itr->value.GetString());
             if (memberName == "Type") {

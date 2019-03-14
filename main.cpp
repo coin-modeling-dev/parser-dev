@@ -5,6 +5,7 @@
 
 #include "src/utils/utils.h"
 #include "test/test_index.h"
+#include "test/test_sqlite.h"
 
 #include "src/parser/DoParse.h"
 
@@ -17,6 +18,8 @@ int main() {
 
     // tests
     testSimpleIndex();
+    test_sqlite();
+
 
     // parse
     Document document;
