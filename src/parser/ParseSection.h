@@ -36,8 +36,5 @@ public:
 
 };
 
-#include "ParseDocument.h"
-#include "ParseInfo.h"
-
 
 #endif //PARSER_DEV_PARSESECTION_H
