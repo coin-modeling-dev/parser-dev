@@ -23,7 +23,10 @@ public:
     explicit ParseData(Document &t_document) : m_document{t_document} {}
 
     void parse(shared_ptr<MosdexRoot> t_mosdex, const string &t_node);
-    void parseTable(shared_ptr<MosdexRoot> t_mosdex, string name, string node);
+
+    void parseRows(shared_ptr<MosdexRoot> t_mosdex, string name, string node);
+    void parseFields(shared_ptr<MosdexRoot> t_mosdex, string name, string node);
+    void parseTypes(shared_ptr<MosdexRoot> t_mosdex, string name, string node);
 
 };
 
@@ -63,7 +66,7 @@ void ParseData::parse(shared_ptr<MosdexRoot> t_mosdex, const string &t_node) {
                 currentDataMemberInProcess = memberName;
                 t_mosdex->initializeTable(currentDataMemberInProcess);
 
-                // parse table components
+                // parse table components: ROWS, FIELDS, TYPES
                 m_state = State::TableComponent;
                 parse(t_mosdex, memberNode);
 
@@ -79,10 +82,10 @@ void ParseData::parse(shared_ptr<MosdexRoot> t_mosdex, const string &t_node) {
                 spdlog::debug("Parsing Table Component {} for table {}", memberName, currentDataMemberInProcess);
                 transform(memberName.begin(), memberName.end(), memberName.begin(), ::toupper);
                 if (memberName == "ROWS") {
-                    parseRows()
+                    parseRows(t_mosdex, currentDataMemberInProcess, memberNode);
                 }
                 if (memberName == "SCHEMA") {
-                    parse(t_mosdex, memberNode, State::Schema);
+                    parse(t_mosdex, memberNode);
                 }
                 break;
             }
@@ -90,25 +93,49 @@ void ParseData::parse(shared_ptr<MosdexRoot> t_mosdex, const string &t_node) {
                 spdlog::debug("Parsing Table {} schema entry {}", currentDataMemberInProcess, memberName);
                 transform(memberName.begin(), memberName.end(), memberName.begin(), ::toupper);
                 if (memberName == "FIELDS") {
-                    parseFields()
+                    parseFields(t_mosdex, currentDataMemberInProcess, memberNode);
                 }
                 if (memberName == "TYPES") {
-                    parseTypes()
+                    parseTypes(t_mosdex, currentDataMemberInProcess, memberNode);
                 }
                 break;
             }
-                string sql = "CREATE TABLE " + currentDataMemberInProcess + " (";
-                \
-                              "ID INT PRIMARY KEY     NOT NULL," \
-                              "NAME           TEXT    NOT NULL," \
-                              "AGE            INT     NOT NULL," \
-                              "ADDRESS        CHAR(50)," \
-                              "SALARY         REAL );";
-
-            }
+                /*
+                    string sql = "CREATE TABLE " + currentDataMemberInProcess + " (";
+                    \
+                                  "ID INT PRIMARY KEY     NOT NULL," \
+                                  "NAME           TEXT    NOT NULL," \
+                                  "AGE            INT     NOT NULL," \
+                                  "ADDRESS        CHAR(50)," \
+                                  "SALARY         REAL );";
+                */
 
         }
+
     }
 }
+
+void ParseData::parseRows(shared_ptr<MosdexRoot> t_mosdex, string name, string node) {
+    spdlog::debug("Parsing rows for table {}", name);
+    // Get Row node
+    Value *rowNode = Pointer(node.c_str()).Get(m_document);
+
+    assert(rowNode->IsArray());
+}
+void ParseData::parseFields(shared_ptr<MosdexRoot> t_mosdex, string name, string node) {
+    spdlog::debug("Parsing fields for table {}", name);
+    // Get Row node
+    Value *fieldsNode = Pointer(node.c_str()).Get(m_document);
+
+    assert(fieldsNode->IsArray());
+}
+void ParseData::parseTypes(shared_ptr<MosdexRoot> t_mosdex, string name, string node) {
+    spdlog::debug("Parsing types for table {}", name);
+    // Get Row node
+    Value *typesNode = Pointer(node.c_str()).Get(m_document);
+
+    assert(typesNode->IsArray());
+}
+
 
 #endif //PARSER_DEV_PARSEDATA_H

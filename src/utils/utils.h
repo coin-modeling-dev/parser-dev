@@ -11,6 +11,8 @@
 #include <cstdio>
 #include <iostream>
 #include <exception>
+#include <map>
+#include <vector>
 
 #include <rapidjson/filereadstream.h>
 #include <rapidjson/stringbuffer.h>

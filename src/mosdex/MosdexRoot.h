@@ -6,8 +6,8 @@
 #define PARSER_DEV_MOSDEXROOT_H
 
 #include "../utils/utils.h"
+#include "MosdexTable.h"
 
-#include <map>
 
 class MosdexRoot {
 private:
@@ -17,8 +17,20 @@ private:
     string m_problemType{};
 
     map <string, string> m_data{};
+    map <string, unique_ptr<MosdexTable>> m_table{};
 
 public:
+
+    void initializeTable(string t_name){
+        spdlog::info("Initializing table {}", t_name);
+        auto table = make_unique<MosdexTable>(MosdexTable(t_name));
+        m_table.insert(make_pair(t_name, move(table)));
+    }
+
+    void createTable(string t_name){
+        spdlog::info("Creating table {}", t_name);
+    }
+
     const string &getM_problemType() const {
         return m_problemType;
     }
