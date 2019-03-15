@@ -12,7 +12,9 @@ class ParseInfo {
 private:
     Document &m_document;
 public:
-    explicit ParseInfo(Document &t_document) : m_document{t_document} {}
+    explicit ParseInfo(Document &t_document) : m_document{t_document} {
+        spdlog::debug("Entering ParseInfo");
+    }
 
     void parse(shared_ptr<MosdexRoot> t_mosdex, string t_component);
 };
@@ -24,8 +26,6 @@ void ParseInfo::parse(shared_ptr<MosdexRoot> t_mosdex, string t_component) {
     for (Value::ConstMemberIterator itr = problemNode->MemberBegin(); itr != problemNode->MemberEnd(); ++itr) {
         string memberName(itr->name.GetString());
         string memberNode = t_component + "/" + memberName;
-        spdlog::debug("Type of member {} is {}",
-                      memberNode.c_str(), kTypeNames[itr->value.GetType()]);
 
         // Handle members that are strings
         if (kTypeNames[itr->value.GetType()] == "String" ) {

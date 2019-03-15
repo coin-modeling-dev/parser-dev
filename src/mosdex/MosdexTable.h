@@ -15,8 +15,8 @@ private:
     vector<string> m_columnTypes{};
     vector<string> m_columnNames{};
 public:
-    MosdexTable(const string &t_tableName) : m_tableName(t_tableName) {
-        spdlog::debug("Creating MosdexTable {}", t_tableName);
+    explicit MosdexTable(const string &t_tableName) : m_tableName(t_tableName) {
+        spdlog::info("Creating MosdexTable {}", t_tableName);
     }
 
     void addColumn(string t_name, string t_type) {

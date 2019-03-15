@@ -17,12 +17,9 @@ public:
     }
 
     void parse(shared_ptr<MosdexRoot> m_mosdex) {
-        for (Value::ConstMemberIterator itr = m_document.MemberBegin();
-             itr != m_document.MemberEnd(); ++itr) {
+        for (Value::ConstMemberIterator itr = m_document.MemberBegin(); itr != m_document.MemberEnd(); ++itr) {
             string memberName(itr->name.GetString());
             string memberNode = "/" + memberName;
-            spdlog::debug("Type of member {} is {}",
-                          memberNode.c_str(), kTypeNames[itr->value.GetType()]);
 
             ParseSection(m_document).parse(m_mosdex, memberNode);
 

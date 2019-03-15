@@ -10,35 +10,35 @@
 #include "../mosdex/MosdexTable.h"
 
 class ParseTable {
-private:
-    Document &m_document;
 
 public:
 
-    explicit ParseTable(Document &m_document) : m_document(m_document) {}
+    explicit ParseTable(Document &m_document) : m_document(m_document) {
+        spdlog::debug("Entering ParseTable");
+    }
 
     void parse(shared_ptr<MosdexRoot> t_mosdex, const string &t_node) {
-        // Get pointer to node
+        // Parse all the tables
+
         Value *vNode = Pointer(t_node.c_str()).Get(m_document);
 
         for (Value::ConstMemberIterator itr = vNode->MemberBegin(); itr != vNode->MemberEnd(); ++itr) {
             string memberName(itr->name.GetString());
             string memberNode = t_node + "/" + memberName;
-
-            spdlog::debug("Type of node {} is {}", memberNode.c_str(), kTypeNames[itr->value.GetType()]);
             parseTable(t_mosdex, memberName, memberNode);
         }
     }
 
 private:
 
+    Document &m_document;
+
     void parseTable(shared_ptr<MosdexRoot> t_mosdex, const string &tableName, const string &t_node);
 
-    void parseRows(shared_ptr<MosdexRoot> t_mosdex, const string &name, const string &node);
+    void parseRows(shared_ptr<MosdexTable> t_mosdex, const string &node);
 
-    void parseFields(shared_ptr<MosdexRoot> t_mosdex, const string &name, const string &node);
+    void parseSchema(shared_ptr<MosdexTable> t_mosdex, const string &node);
 
-    void parseTypes(shared_ptr<MosdexRoot> t_mosdex, const string &name, const string &node);
 };
 
 void ParseTable::parseTable(shared_ptr<MosdexRoot> t_mosdex, const string &tableName, const string &t_node) {
@@ -46,30 +46,20 @@ void ParseTable::parseTable(shared_ptr<MosdexRoot> t_mosdex, const string &table
     spdlog::debug("Parsing Table {}", tableName);
 
     // store table name and initialize table in Mosdex
-    t_mosdex->initializeTable(tableName);
+    auto mosdexTable = t_mosdex->initializeTable(tableName);
 
-    // Get pointer to node
+    // Loop over table object and execute code for each section
     Value *vNode = Pointer(t_node.c_str()).Get(m_document);
-
     for (Value::ConstMemberIterator itr = vNode->MemberBegin(); itr != vNode->MemberEnd(); ++itr) {
         string memberName(itr->name.GetString());
         string memberNode = t_node + "/" + memberName;
-
-        spdlog::debug("Type of node {} is {}", memberNode.c_str(), kTypeNames[itr->value.GetType()]);
-
         transform(memberName.begin(), memberName.end(), memberName.begin(), ::toupper);
 
         if (memberName == "ROWS") {
-            parseRows(t_mosdex, tableName, memberNode);
+            parseRows(mosdexTable, memberNode);
         }
         if (memberName == "SCHEMA") {
-            continue;
-        }
-        if (memberName == "TYPES") {
-            parseTypes(t_mosdex, tableName, memberNode);
-        }
-        if (memberName == "FIELDS") {
-            parseFields(t_mosdex, tableName, memberNode);
+            parseSchema(mosdexTable, memberNode);
         }
     }
 }
@@ -84,29 +74,30 @@ void ParseTable::parseTable(shared_ptr<MosdexRoot> t_mosdex, const string &table
                   "SALARY         REAL );";
 */
 
-void ParseTable::parseRows(shared_ptr<MosdexRoot> t_mosdex, const string &name, const string &node) {
-    spdlog::debug("Parsing rows for table {}", name);
-    // Get Row node
+void ParseTable::parseRows(shared_ptr<MosdexTable> t_mosdex, const string &node) {
+    spdlog::debug("Parsing rows for table {}", t_mosdex->getM_tableName());
     Value *rowNode = Pointer(node.c_str()).Get(m_document);
 
     assert(rowNode->IsArray());
 }
 
-void ParseTable::parseFields(shared_ptr<MosdexRoot> t_mosdex, const string &name, const string &node) {
-    spdlog::debug("Parsing fields for table {}", name);
-    // Get Row node
-    Value *fieldsNode = Pointer(node.c_str()).Get(m_document);
+void ParseTable::parseSchema(shared_ptr<MosdexTable> t_mosdex, const string &node) {
+    spdlog::debug("Parsing Schema for table {}", t_mosdex->getM_tableName());
 
-    assert(fieldsNode->IsArray());
+    Value *schemaNode = Pointer(node.c_str()).Get(m_document);
+    for (Value::ConstMemberIterator itr = schemaNode->MemberBegin(); itr != schemaNode->MemberEnd(); ++itr) {
+        string memberName(itr->name.GetString());
+        string memberNode = node + "/" + memberName;
+        transform(memberName.begin(), memberName.end(), memberName.begin(), ::toupper);
+
+        if (memberName == "TYPES") {
+            spdlog::debug("Parsing TYPES for table {}", t_mosdex->getM_tableName());
+        }
+        if (memberName == "FIELDS") {
+            spdlog::debug("Parsing FIELDS for table {}", t_mosdex->getM_tableName());
+        }
+    }
+
 }
-
-void ParseTable::parseTypes(shared_ptr<MosdexRoot> t_mosdex, const string &name, const string &node) {
-    spdlog::debug("Parsing types for table {}", name);
-    // Get Row node
-    Value *typesNode = Pointer(node.c_str()).Get(m_document);
-
-    assert(typesNode->IsArray());
-}
-
 
 #endif //PARSER_DEV_PARSETABLE_H

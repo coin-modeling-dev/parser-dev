@@ -17,14 +17,13 @@ private:
     string m_problemType{};
 
     map <string, string> m_data{};
-    map <string, unique_ptr<MosdexTable>> m_table{};
+    map<string, shared_ptr<MosdexTable>> m_table{};
 
 public:
 
-    void initializeTable(string t_name){
+    shared_ptr<MosdexTable> initializeTable(string t_name) {
         spdlog::info("Initializing table {}", t_name);
-        auto table = make_unique<MosdexTable>(MosdexTable(t_name));
-        m_table.insert(make_pair(t_name, move(table)));
+        return make_shared<MosdexTable>(MosdexTable(t_name));
     }
 
     void createTable(string t_name){
@@ -36,12 +35,12 @@ public:
     }
 
     void setM_problemType(const string &m_problemType) {
-        spdlog::debug("MosdexRoot: Setting problem type to {}", m_problemType);
+        spdlog::info("MosdexRoot: Setting problem type to {}", m_problemType);
         MosdexRoot::m_problemType = m_problemType;
     }
 
     void setInfoValue(string t_key, string t_value){
-        spdlog::debug("MosdexRoot: Setting info -- {} is {}", t_key, t_value);
+        spdlog::info("MosdexRoot: Information recorded {} : {}", t_key, t_value);
         m_info.insert(make_pair(t_key, t_value));
     }
 

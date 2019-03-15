@@ -17,11 +17,11 @@ private:
 
 public:
 
-    explicit ParseSection(Document &t_document) : m_document{t_document} {}
+    explicit ParseSection(Document &t_document) : m_document{t_document} {
+        spdlog::debug("Entering ParseSection");
+    }
 
     void parse(shared_ptr<MosdexRoot> t_mosdex, string t_section) {
-        spdlog::debug("Parsing {} section", t_section);
-
         // transform to upper case
         string section = t_section;
         transform(section.begin(), section.end(), section.begin(), ::toupper);
